@@ -19,8 +19,27 @@ const NewsLetter = () => {
     resolver: yupResolver(validationSchema),
   })
 
-  const onSubmit = data => {
-    console.log(data)
+  const encode = data => {
+    return Object.keys(data)
+      .map(key => encodeURIComponent(key) + '=' + encodeURIComponent(data[key]))
+      .join('&')
+  }
+
+  const onSubmit = (values, actions) => {
+    console.log(JSON.stringify(values, null, 2))
+    fetch('/', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: encode({ 'form-name': 'contact-form', ...values }),
+    })
+      .then(() => {
+        alert('Success')
+        actions.resetForm()
+      })
+      .catch(() => {
+        alert('Error')
+      })
+      .finally(() => actions.setSubmitting(false))
   }
 
   return (
