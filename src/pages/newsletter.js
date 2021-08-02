@@ -13,10 +13,15 @@ const validationSchema = yup.object().shape({
 const NewsLetter = () => {
   const {
     register,
+    handleSubmit,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(validationSchema),
   })
+
+  const onSubmit = data => {
+    console.log(data)
+  }
 
   return (
     <Layout>
@@ -31,6 +36,7 @@ const NewsLetter = () => {
             netlify-honeypot="bot-field"
             data-netlify="true"
             action="/success"
+            onSubmit={handleSubmit(onSubmit)}
           >
             <input type="hidden" name="bot-field" />
             <input type="hidden" name="form-name" value="contact" />
