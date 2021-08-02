@@ -1,6 +1,23 @@
 import React from 'react'
 import Layout from '../components/Layout'
+
+import { useForm } from 'react-hook-form'
+import { yupResolver } from '@hookform/resolvers/yup'
+import * as yup from 'yup'
+
+const validationSchema = yup.object().shape({
+  name: yup.string().required('Required'),
+  email: yup.string().email('Invalid email format').required('Required'),
+})
+
 const NewsLetter = () => {
+  const {
+    register,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(validationSchema),
+  })
+
   return (
     <Layout>
       <section className="newsletter-page">
@@ -19,17 +36,17 @@ const NewsLetter = () => {
             <input type="hidden" name="form-name" value="contact" />
 
             <input
-              type="text"
-              name="name"
+              {...register('name')}
               placeholder="Your name"
               className="form-control"
             />
+            <p>{errors.name?.message}</p>
             <input
-              type="email"
-              name="email"
+              {...register('email')}
               placeholder="Your email"
               className="form-control"
             />
+            <p>{errors.email?.message}</p>
             <button type="submit" className="btn form-control">
               subscribe
             </button>
